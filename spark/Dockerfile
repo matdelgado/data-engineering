@@ -1,4 +1,9 @@
-FROM eclipse-temurin:11-jre-alpine
+# Note: the -alpine variants of eclipse-temurin are published for amd64 only,
+# so they do not build on Apple Silicon. The -jammy variants are multi-arch.
+FROM eclipse-temurin:11-jre-jammy
+
+RUN apt-get update && apt-get install -y --no-install-recommends wget \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /spark
 

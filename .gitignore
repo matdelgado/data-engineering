@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Airflow runtime state (generated inside the container, mounted from here).
+# The directory itself is kept so Docker does not create it as root.
+airflow/logs/*
+!airflow/logs/.gitkeep
+
+# dbt build output (see also dbt_lakehouse/.gitignore)
+dbt_lakehouse/target/
+dbt_lakehouse/dbt_packages/
+dbt_lakehouse/logs/
+
+# Local service data
+airbyte_data/
+
+# Editors
+.vscode/
+.idea/

@@ -1,4 +1,0 @@
-[2025-07-05T06:12:03.650+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
-[2025-07-05T06:12:03.758+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: example_dynamic_task_mapping.add_one scheduled__2022-05-01T00:00:00+00:00 map_index=1 [queued]>
-[2025-07-05T06:12:03.809+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: example_dynamic_task_mapping.add_one scheduled__2022-05-01T00:00:00+00:00 map_index=1 [queued]>
-[2025-07-05T06:12:03.809+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 1

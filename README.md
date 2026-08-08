@@ -47,7 +47,18 @@ Before you start, make sure you are inside the project directory (data-engineeri
 Use the following command to build all services.
 
 ```
-docker-compose up -d --build
+docker compose up -d --build
+```
+
+The first run downloads several GB of images and builds three of them, so it can take
+15-30 minutes depending on your connection. Give Docker Desktop at least **8 GB of RAM**
+(Settings → Resources), otherwise Spark and Superset will be killed on startup.
+
+Follow the progress with:
+
+```
+docker compose ps
+docker compose logs -f airflow
 ```
 
 #### Initial setup of the data catalog
@@ -60,19 +71,15 @@ docker exec -it spark-master bash -c "/scripts/update_hive_metastore.sh"
 
 Your project is correct if you are able to access the following links from your localhost.
 
-```
-MinIO Console UI
-http://localhost:9001
+| Service | URL | User | Password |
+| --- | --- | --- | --- |
+| MinIO Console UI | http://localhost:9001 | `minio` | `minio123` |
+| Airflow Web UI | http://localhost:8080 | `admin` | `admin` |
+| Spark Master UI | http://localhost:8081 | – | – |
+| Apache Superset UI | http://localhost:8088 | `admin` | `admin` |
 
-Airflow Web UI
-http://localhost:8080
-
-Spark Master UI
-http://localhost:8081
-
-Apache Superset UI
-http://localhost:8088
-```
+These are throwaway credentials for a local teaching environment — never reuse them
+outside of it.
 
 ## Notes for project configurations (no need to execute anything)
 
@@ -136,11 +143,34 @@ show tables in marts;
 You can use the following command to destroy all services.
 
 ```
-docker-compose down --volumes --remove-orphans
+docker compose down --volumes --remove-orphans
 ```
 
 In case you have lost refence to the existing containers, it is possible to force a shut down.
 
 ```
 docker container kill $(docker container ls -q)
+```
+
+> ⚠️ This kills **every** running container on your machine, not only this project's.
+
+## Troubleshooting
+
+#### `Bind for 0.0.0.0:8080 failed: port is already allocated`
+
+Another process (often an unrelated container) is already using one of the ports
+this project publishes: `8080`, `8081`, `8088`, `8091`, `9000`, `9001`, `7077`,
+`10000`, `10001`. Find the culprit and stop it:
+
+```
+docker ps --filter "publish=8080"
+lsof -nP -iTCP:8080 -sTCP:LISTEN
+```
+
+#### A service keeps restarting
+
+Read its logs — the reason is almost always in the last few lines:
+
+```
+docker compose logs --tail=50 <service-name>
 ```
