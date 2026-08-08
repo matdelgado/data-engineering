@@ -22,6 +22,7 @@ dbt_lakehouse/dbt_packages/
 dbt_lakehouse/logs/
 
 # Local service data
+logs/*
 airbyte_data/
 
 # Editors

@@ -81,8 +81,8 @@ services:
       - ./airflow/plugins:/opt/airflow/plugins
       - ./airflow/init:/opt/airflow/init
       - ./spark:/app
-      - ./dbt_lakehouse:/dbt_lakehouse
-      - ./dbt_lakehouse/profiles_template.yml:/home/airflow/.dbt/profiles.yml
+      - ./dbt_lakehouse:/home/airflow/dbt_lakehouse
+      - ./dbt_lakehouse/profiles.yml:/home/airflow/.dbt/profiles.yml
       - ./data:/data
       - ./spark:/opt/spark
     ports:

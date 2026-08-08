@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from datetime import datetime
 
-DBT_DIR = "/dbt_lakehouse"
+DBT_DIR = "/home/airflow/dbt_lakehouse"
 
 default_args = {
     "owner": "airflow",

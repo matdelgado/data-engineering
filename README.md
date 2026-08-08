@@ -42,6 +42,15 @@ Please, execute the following commands to initiate the project.
 
 Before you start, make sure you are inside the project directory (data-engineering).
 
+#### Grant permissions
+
+Make sure you granted full access on Airflow and DBT folders
+
+```
+sudo chmod -R 777 airflow/
+sudo chmod -R 777 dbt_lakehouse/
+```
+
 #### Build all services
 
 Use the following command to build all services.
@@ -93,10 +102,18 @@ Use this connection string to connect Superset to the lakehouse.
 hive://spark-thrift-server:10000/default
 ```
 
+Once connected, you should be able to query the DBT table
+
+```
+SELECT SUM(total_amount) AS total_amount FROM marts.fct_summary
+```
+
+
+
 #### Initiating DBT Docs server
 
 ```
-docker exec -it airflow bash -c "cd /dbt_lakehouse/target && python3 -m http.server 8091"
+docker exec -it airflow bash -c "cd /home/airflow/dbt_lakehouse/target && python3 -m http.server 8091"
 ```
 
 Check results at http://localhost:8091
@@ -120,12 +137,12 @@ chmod -R 777 airflow/
 
 #### Run DBT project from Airflow container
 ```
-docker exec -it airflow bash -c "dbt run --project-dir /dbt_lakehouse"
+docker exec -it airflow bash -c "dbt run --project-dir /home/airflow/dbt_lakehouse"
 ```
 
 #### Run DBT model from Airflow container
 ```
-docker exec -it airflow bash -c "dbt run --project-dir /dbt_lakehouse --select models/marts/fct_summary.sql"
+docker exec -it airflow bash -c "dbt run --project-dir /home/airflow/dbt_lakehouse --select models/marts/fct_summary.sql"
 ```
 
 #### Connecting to the Hive metastore from spark-master
@@ -156,6 +173,15 @@ docker container kill $(docker container ls -q)
 
 ## Troubleshooting
 
+#### Checking container logs
+
+Whatever the problem is, the reason is almost always in the last few lines of the
+service's log:
+
+```
+docker compose logs --tail=50 airflow
+```
+
 #### `Bind for 0.0.0.0:8080 failed: port is already allocated`
 
 Another process (often an unrelated container) is already using one of the ports
@@ -167,10 +193,11 @@ docker ps --filter "publish=8080"
 lsof -nP -iTCP:8080 -sTCP:LISTEN
 ```
 
-#### A service keeps restarting
+#### Resolving permissions issue
 
-Read its logs — the reason is almost always in the last few lines:
+In case Airflow is failing because of permission issues.
 
 ```
-docker compose logs --tail=50 <service-name>
+sudo chmod -R 777 airflow/
+sudo chmod -R 777 dbt_lakehouse/
 ```

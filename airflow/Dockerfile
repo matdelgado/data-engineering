@@ -26,9 +26,8 @@ USER airflow
 # Install Python dependencies: PySpark, DBT
 RUN pip install --no-cache-dir \
     pyspark==3.4.3 \
-    dbt-core==1.10.3 \
-    dbt-trino==1.9.2 \
-    dbt-spark==1.9.2 \
+    dbt-core==1.10.9 \
+    dbt-spark==1.9.3 \
     dbt-spark[PyHive]
 
 RUN pip install psycopg2-binary
