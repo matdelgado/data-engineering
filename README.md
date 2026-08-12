@@ -33,6 +33,41 @@ To get your project URL, go to the GitHub repository you just forked (in your Gi
 
 <img src="_support/git-clone.png" width="400">
 
+## Keeping your fork up to date
+
+Your fork is a **snapshot**, taken the moment you clicked Fork. It does not follow the
+original repository afterwards, and neither does your clone — `git pull` fetches from
+*your* fork, so fixes published here never reach you on their own.
+
+Do this whenever something in the guide does not behave as described, and once before you
+start each new part of the course.
+
+The easy way is the **Sync fork** button on your fork's page on GitHub. It appears right
+above the file list whenever your copy is behind, and one click is enough.
+
+The command line equivalent, from inside your working dir — you only need the first line
+once, ever:
+
+```
+git remote add upstream https://github.com/weslleymoura/data-engineering.git
+git fetch upstream
+git merge upstream/main
+git push origin main
+```
+
+> If `git merge` reports conflicts, it means you changed the same lines that were fixed
+> upstream. Keep your version with `git checkout --ours <file>`, take the fix with
+> `git checkout --theirs <file>`, then `git add` the file and `git commit`.
+
+Some fixes also change how files are checked out rather than what is in them — the
+`.gitattributes` that forces LF endings is one. Those need your working tree refreshed
+after syncing. Commit or stash your own work first, because `reset --hard` discards
+uncommitted changes:
+
+```
+git rm --cached -r .
+git reset --hard
+```
 
 ## Starting the project
 
@@ -139,14 +174,9 @@ the script has Windows line endings. Git for Windows defaults to
 path nobody wrote, which makes it look like a broken volume mount — it is not.
 
 The repository now ships a `.gitattributes` that forces LF, so a **fresh clone** is fine.
-If you cloned before that, refresh your working tree — commit or stash your own work
-first, because `reset --hard` discards uncommitted changes:
-
-```
-git pull
-git rm --cached -r .
-git reset --hard
-```
+If you cloned before that, follow [Keeping your fork up to date](#keeping-your-fork-up-to-date)
+— note that `git pull` alone will not do it, because it fetches from your fork, which does
+not have the fix yet.
 
 Or just skip the script and run the one statement it contains:
 
