@@ -124,6 +124,38 @@ server's catalog, which is what Superset and DBT connect to.
 > empty location: it succeeds without any error message, and only blows up later, on the
 > first query.
 
+<details>
+<summary><b>Windows:</b> "bad interpreter" or "required file not found" here</summary>
+
+If this step fails with something like
+
+```
+bash: /scripts/update_hive_metastore.sh: /bin/bash^M: bad interpreter: No such file or directory
+```
+
+the script has Windows line endings. Git for Windows defaults to
+`core.autocrlf=true` and rewrites LF to CRLF on checkout, so the shebang becomes
+`#!/bin/bash\r` and Linux looks for an interpreter that does not exist. The error names a
+path nobody wrote, which makes it look like a broken volume mount — it is not.
+
+The repository now ships a `.gitattributes` that forces LF, so a **fresh clone** is fine.
+If you cloned before that, refresh your working tree — commit or stash your own work
+first, because `reset --hard` discards uncommitted changes:
+
+```
+git pull
+git rm --cached -r .
+git reset --hard
+```
+
+Or just skip the script and run the one statement it contains:
+
+```
+docker exec -it spark-master bash -c "beeline -u jdbc:hive2://spark-thrift-server:10000 -e \"CREATE TABLE IF NOT EXISTS default.order_summary USING DELTA LOCATION 's3a://gold/warehouse/default/order_summary';\""
+```
+
+</details>
+
 #### 3. Run the DBT project
 
 Back in the Airflow UI, unpause and trigger `dbt_run_lakehouse_project`. Its three tasks run

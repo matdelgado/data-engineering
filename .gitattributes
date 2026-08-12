@@ -1,0 +1,22 @@
+# Everything in this repository is executed inside Linux containers, so every
+# text file must be checked out with LF endings -- including on Windows.
+#
+# Git for Windows defaults to core.autocrlf=true, which rewrites LF to CRLF on
+# checkout. A shell script then starts with `#!/bin/bash\r`, and the kernel
+# goes looking for an interpreter literally named "/bin/bash\r":
+#
+#     bash: /scripts/update_hive_metastore.sh: /bin/bash^M:
+#           bad interpreter: No such file or directory
+#
+# The error names a path nobody wrote, which makes it read like a broken mount
+# or a wrong volume rather than a line-ending problem. The same breakage hits
+# .sql, .yml and .py files that Spark, dbt and Airflow read inside the
+# containers.
+#
+# `text=auto` still lets Git detect binary files and leave them untouched; the
+# explicit rules below are belt and braces for the formats this repo ships.
+* text=auto eol=lf
+
+*.png binary
+*.pdf binary
+*.parquet binary
