@@ -26,9 +26,12 @@
     "8091": { "label": "DBT Docs" }
   },
 
-  // Com prebuild ligado no repositório, isso roda antes de o aluno abrir o
-  // ambiente: as imagens já vêm prontas e o docker compose up leva segundos.
-  "onCreateCommand": "docker compose build && (docker compose pull --ignore-buildable || true)",
+  // Não adianta construir as imagens do compose aqui para o prebuild aproveitar:
+  // a feature docker-in-docker monta /var/lib/docker como volume nomeado
+  // (dind-var-lib-docker-${devcontainerId}), e o prebuild fotografa o container,
+  // não o conteúdo dos volumes. As imagens seriam descartadas. O prebuild ainda
+  // adianta a imagem base, as features e o clone do repositório -- só não o
+  // `docker compose up -d --build`, que roda uma vez na máquina do aluno.
 
   // Mesmo chmod do passo 3 do README, automatizado.
   "postCreateCommand": "sudo chmod -R 777 airflow dbt_lakehouse",

@@ -15,8 +15,9 @@ funcionando na sua máquina.
 > 2. No seu fork, clique no botão verde **Code** → aba **Codespaces** →
 >    **Create codespace on main**.
 > 3. Quando o editor abrir, siga a partir da **seção 3**, pulando o `chmod` (roda
->    sozinho) — o `docker compose up -d --build` é igual. Ignore ali as notas de RAM e de
->    tempo: valem só para quem roda na própria máquina.
+>    sozinho) — o `docker compose up -d --build` é igual. Ignore ali só a nota de RAM,
+>    que vale para o Docker Desktop. Os 15 a 30 minutos da primeira execução valem aqui
+>    também: as imagens são construídas dentro do Codespaces.
 >
 > Para abrir os serviços, use a aba **PORTS** (barra inferior, ao lado do TERMINAL) em vez
 > de `localhost` — cada porta tem uma URL própria.
