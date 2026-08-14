@@ -7,23 +7,8 @@ DBT (transformação) e Superset (visualização).
 Este README é o **guia de execução**: siga de cima para baixo e você terá o lakehouse
 funcionando na sua máquina.
 
-> **Prefere não instalar nada?** Use o **GitHub Codespaces**: um ambiente pronto, no
-> navegador, sem instalar Docker.
->
-> 1. Faça o **fork** do projeto (seção 2) — o Codespaces precisa ser criado a partir do
->    **seu** fork, senão você não consegue salvar seu trabalho.
-> 2. No seu fork, clique no botão verde **Code** → aba **Codespaces** →
->    **Create codespace on main**.
-> 3. Quando o editor abrir, siga a partir da **seção 3**, pulando o `chmod` (roda
->    sozinho) — o `docker compose up -d --build` é igual. Ignore ali só a nota de RAM,
->    que vale para o Docker Desktop. Os 15 a 30 minutos da primeira execução valem aqui
->    também: as imagens são construídas dentro do Codespaces.
->
-> Para abrir os serviços, use a aba **PORTS** (barra inferior, ao lado do TERMINAL) em vez
-> de `localhost` — cada porta tem uma URL própria.
->
-> **Pare o Codespaces quando terminar** (menu ☰ → *Stop current codespace*). Ele consome
-> cota por hora enquanto estiver ligado.
+> **Prefere não instalar nada na sua máquina?** Dá para rodar tudo no navegador, pelo
+> GitHub Codespaces: faça o fork (seção 2) e siga a **seção 4** no lugar da 3.
 
 ---
 
@@ -113,7 +98,102 @@ O ambiente está correto se você conseguir abrir estes endereços:
 
 ---
 
-## 4. Montando o lakehouse — pipeline de exemplo
+## 4. Alternativa: rodar no GitHub Codespaces
+
+Em vez de instalar Docker na sua máquina, você pode rodar tudo no navegador. O projeto é
+o mesmo — os comandos das próximas seções funcionam igual lá dentro.
+
+Antes de começar: você precisa ter feito o **fork** (seção 2). O Codespaces tem que ser
+criado a partir do **seu** fork, senão você não consegue salvar seu trabalho.
+
+### Passo 1 — Preparar o ambiente (opcional)
+
+No **seu fork**: **Settings** → **Codespaces** → **Set up prebuild** → branch `main` →
+**Create**.
+
+O prebuild deixa parte do ambiente pronta com antecedência, então o Codespaces abre mais
+rápido. É opcional: sem ele tudo funciona igual, só leva alguns minutos a mais na criação.
+Ele também consome um pouco da sua cota, então pule se estiver economizando.
+
+### Passo 2 — Criar o Codespaces
+
+No seu fork: botão verde **Code** → aba **Codespaces** → **Create codespace on main**.
+
+O ambiente leva alguns minutos para montar. Quando o editor abrir, você está pronto.
+
+### Passo 3 — Subir os serviços
+
+No terminal do Codespaces:
+
+```
+docker compose up -d --build
+```
+
+De 15 a 30 minutos na primeira vez — ele constrói as imagens ali dentro. Depois:
+
+```
+docker compose ps
+```
+
+Os 9 containers devem aparecer. Você **não** precisa rodar o `chmod` da seção 3: ele já
+roda sozinho na criação do ambiente.
+
+### Passo 4 — Abrir os serviços
+
+Use a aba **PORTS**, na barra inferior ao lado do TERMINAL. Passe o mouse na porta que
+quer abrir e clique no ícone de globo.
+
+| Porta | Serviço |
+| --- | --- |
+| 8080 | Airflow |
+| 8081 | Spark Master |
+| 8088 | Superset |
+| 9001 | MinIO |
+| 8091 | DBT Docs |
+
+Usuários e senhas são os mesmos da tabela da seção 3. **Não use `localhost`** no
+navegador: no Codespaces cada porta tem uma URL própria, gerada pelo GitHub.
+
+### Passo 5 — Seguir o guia
+
+Agora siga a **seção 5** normalmente. Todos os comandos funcionam igual.
+
+### Passo 6 — Encerrar quando terminar de estudar
+
+Isso importa: o Codespaces é gratuito **até um limite mensal**, e o limite se esgota mesmo
+quando você não está usando.
+
+São dois consumos separados:
+
+| O que conta | Cota gratuita | Quanto dura na nossa máquina |
+| --- | --- | --- |
+| Tempo ligado | 120 core-hours/mês | ~15 horas de uso |
+| Ambiente existindo | 15 GB-month | ~7 dias, mesmo parado |
+
+Repare na segunda linha: **o armazenamento conta enquanto o ambiente existir**, ligado ou
+não. Parar não é suficiente.
+
+**Ao terminar uma sessão de estudo**, pare o ambiente — assim ele para de consumir tempo,
+mas o seu trabalho continua lá para a próxima vez:
+
+* Menu **☰** (canto superior esquerdo) → **Stop Current Codespace**
+
+**Ao terminar de vez** (fim de um módulo, ou se for ficar dias sem usar), apague — é a
+única forma de parar o consumo de armazenamento:
+
+1. Faça `git push` de qualquer trabalho que queira guardar, porque apagar remove tudo
+2. Acesse [github.com/codespaces](https://github.com/codespaces)
+3. No menu **`...`** do ambiente → **Delete**
+
+Criar de novo depois é rápido, e você não perde nada que já tenha enviado para o seu fork.
+
+> Se a cota acabar, o Codespaces simplesmente para de abrir até o mês virar — não gera
+> cobrança nenhuma. Mas você fica sem ambiente, então vale apagar quando não estiver
+> usando.
+
+---
+
+## 5. Montando o lakehouse — pipeline de exemplo
 
 Neste momento os serviços estão no ar, mas **o lakehouse está vazio**. Os passos abaixo são
 os que constroem os dados, e a **ordem importa**: cada um depende do anterior.
@@ -165,7 +245,7 @@ Se voltar um número, a corrente inteira funciona: MinIO → Spark → Delta →
 
 ---
 
-## 5. Mantendo seu fork atualizado
+## 6. Mantendo seu fork atualizado
 
 Seu fork é uma **fotografia** tirada no momento em que você clicou em Fork. Ele não
 acompanha o repositório original sozinho, e o seu `git pull` busca do **seu** fork — então
@@ -213,7 +293,7 @@ git reset --hard
 
 ---
 
-## 6. Comandos úteis
+## 7. Comandos úteis
 
 **Conectar o Superset ao lakehouse** — use esta string de conexão:
 
