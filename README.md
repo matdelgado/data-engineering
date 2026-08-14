@@ -7,13 +7,22 @@ DBT (transformação) e Superset (visualização).
 Este README é o **guia de execução**: siga de cima para baixo e você terá o lakehouse
 funcionando na sua máquina.
 
-> **Prefere não instalar nada?** Abra o projeto no **GitHub Codespaces** (botão verde
-> **Code** → aba **Codespaces** → **Create codespace on main**). O ambiente já vem com
-> Docker pronto e o projeto clonado.
+> **Prefere não instalar nada?** Use o **GitHub Codespaces**: um ambiente pronto, no
+> navegador, sem instalar Docker.
 >
-> Nesse caso: pule as seções 1 e 2, e na seção 3 pule o `chmod` — ele roda sozinho. O
-> `docker compose up -d --build` é igual. Para abrir os serviços, use a aba **PORTS** do
-> VS Code em vez de `localhost`: cada porta tem uma URL própria.
+> 1. Faça o **fork** do projeto (seção 2) — o Codespaces precisa ser criado a partir do
+>    **seu** fork, senão você não consegue salvar seu trabalho.
+> 2. No seu fork, clique no botão verde **Code** → aba **Codespaces** →
+>    **Create codespace on main**.
+> 3. Quando o editor abrir, siga a partir da **seção 3**, pulando o `chmod` (roda
+>    sozinho) — o `docker compose up -d --build` é igual. Ignore ali as notas de RAM e de
+>    tempo: valem só para quem roda na própria máquina.
+>
+> Para abrir os serviços, use a aba **PORTS** (barra inferior, ao lado do TERMINAL) em vez
+> de `localhost` — cada porta tem uma URL própria.
+>
+> **Pare o Codespaces quando terminar** (menu ☰ → *Stop current codespace*). Ele consome
+> cota por hora enquanto estiver ligado.
 
 ---
 
