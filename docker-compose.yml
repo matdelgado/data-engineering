@@ -173,6 +173,12 @@ services:
     volumes:
       - ./spark:/app
       - ./data:/data
+      # The Hive metastore. Without this volume it lives in the container
+      # filesystem and is destroyed every time the container is recreated,
+      # taking every schema and table registration with it while the data
+      # survives in MinIO -- which is what makes `docker compose down`
+      # (without --volumes) leave the lakehouse in a broken half state.
+      - thrift_metastore:/metastore
     restart: unless-stopped
     networks:
       - data-net
@@ -219,6 +225,7 @@ services:
 volumes:
   minio_data:
   airflow_db_data:
+  thrift_metastore:
 
 networks:
   data-net:

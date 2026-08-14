@@ -43,6 +43,7 @@ ENTRYPOINT java \
  --conf spark.cores.max=1 \
  --conf spark.executor.instances=1 \
  --conf spark.sql.catalogImplementation=hive \
+ --conf spark.hadoop.javax.jdo.option.ConnectionURL="jdbc:derby:;databaseName=/metastore/metastore_db;create=true" \
  --conf spark.hadoop.fs.s3a.endpoint=http://minio:9000 \
  --conf spark.hadoop.fs.s3a.access.key=minio \
  --conf spark.hadoop.fs.s3a.secret.key=minio123 \

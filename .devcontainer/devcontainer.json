@@ -1,0 +1,41 @@
+{
+  "name": "Engenharia de Dados",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+
+  // Precisa ser docker-in-docker: o compose usa caminhos relativos
+  // (./airflow/dags, ./dbt_lakehouse), que o docker-outside-of-docker
+  // resolveria no host e apontariam para o lugar errado.
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+
+  // 9 containers, pico medido de ~5 GB durante o dbt build. Imagens somam ~4 GB.
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16gb",
+    "storage": "32gb"
+  },
+
+  // No Codespaces o acesso é pela aba PORTS, não por localhost.
+  "forwardPorts": [8080, 8081, 8088, 9001, 8091],
+  "portsAttributes": {
+    "8080": { "label": "Airflow" },
+    "8081": { "label": "Spark Master" },
+    "8088": { "label": "Superset" },
+    "9001": { "label": "MinIO" },
+    "8091": { "label": "DBT Docs" }
+  },
+
+  // Com prebuild ligado no repositório, isso roda antes de o aluno abrir o
+  // ambiente: as imagens já vêm prontas e o docker compose up leva segundos.
+  "onCreateCommand": "docker compose build && (docker compose pull --ignore-buildable || true)",
+
+  // Mesmo chmod do passo 3 do README, automatizado.
+  "postCreateCommand": "sudo chmod -R 777 airflow dbt_lakehouse",
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python", "redhat.vscode-yaml"]
+    }
+  }
+}
