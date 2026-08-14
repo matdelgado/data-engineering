@@ -9,11 +9,22 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
 
-  // 9 containers, pico medido de ~5 GB durante o dbt build. Imagens somam ~4 GB.
+  // Medido dentro de um Codespaces real, depois do `docker compose up -d --build`:
+  //   imagens                     12,5 GB
+  //   camadas de escrita           4,1 GB
+  //   cache de build               8,8 GB
+  //   + base do dev container   ~= 29 GB
+  // Ou seja, 32 GB estoura. E o sintoma é péssimo: o disco enche no meio de um
+  // job Spark e aparece como `No space left on device` dentro de um rastro Java,
+  // além de matar o scheduler do Airflow sem derrubar o container.
+  //
+  // 64 GB obriga uma máquina de 8 núcleos, que consome a cota do aluno mais
+  // rápido. A alternativa seria publicar as imagens prontas num registry: sem
+  // `build:` não existe cache de build, e caberia com folga em 32 GB.
   "hostRequirements": {
     "cpus": 4,
     "memory": "16gb",
-    "storage": "32gb"
+    "storage": "64gb"
   },
 
   // No Codespaces o acesso é pela aba PORTS, não por localhost.
