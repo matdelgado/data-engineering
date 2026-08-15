@@ -123,13 +123,21 @@ O ambiente leva alguns minutos para montar. Quando o editor abrir, você está p
 
 ### Passo 3 — Subir os serviços
 
-No terminal do Codespaces:
+No terminal do Codespaces, rode os três comandos **na ordem**:
 
 ```
-docker compose up -d --build
+docker compose build
+docker builder prune -af
+docker compose up -d
 ```
 
-De 15 a 30 minutos na primeira vez — ele constrói as imagens ali dentro. Depois:
+De 15 a 30 minutos na primeira vez — ele constrói as imagens ali dentro.
+
+> O comando do meio não é opcional. O disco do Codespaces é de 32 GB, e o cache
+> gerado durante o build ocupa quase 9 GB que não servem para mais nada depois que
+> as imagens ficam prontas. Sem apagá-lo, o disco enche no meio do pipeline.
+
+Confira se subiu:
 
 ```
 docker compose ps

@@ -9,22 +9,29 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {}
   },
 
-  // Medido dentro de um Codespaces real, depois do `docker compose up -d --build`:
+  // 32 GB / 4 núcleos é a máquina padrão, disponível em qualquer conta. Não peça
+  // mais: máquinas com disco acima de 32 GB não são liberadas por padrão (nem no
+  // Pro/Student), e exigir 64 GB deixa o seletor de máquina vazio -- "None" em
+  // todas as regiões -- impedindo a criação do Codespaces.
+  //
+  // Cabe, mas é apertado. Medido dentro de um Codespaces real, depois do
+  // `docker compose up -d --build`:
   //   imagens                     12,5 GB
   //   camadas de escrita           4,1 GB
   //   cache de build               8,8 GB
   //   + base do dev container   ~= 29 GB
-  // Ou seja, 32 GB estoura. E o sintoma é péssimo: o disco enche no meio de um
-  // job Spark e aparece como `No space left on device` dentro de um rastro Java,
-  // além de matar o scheduler do Airflow sem derrubar o container.
+  // Por isso o README manda rodar `docker builder prune -af` entre o build e o
+  // `up`: o cache de build não serve para mais nada depois que as imagens estão
+  // prontas, e devolve os 8,8 GB que o pipeline precisa. Sem esse passo o disco
+  // enche no meio de um job Spark, aparece como `No space left on device` dentro
+  // de um rastro Java e ainda mata o scheduler do Airflow sem derrubar o container.
   //
-  // 64 GB obriga uma máquina de 8 núcleos, que consome a cota do aluno mais
-  // rápido. A alternativa seria publicar as imagens prontas num registry: sem
-  // `build:` não existe cache de build, e caberia com folga em 32 GB.
+  // A solução definitiva é publicar as imagens prontas num registry: sem `build:`
+  // não existe cache de build, e sobra folga real.
   "hostRequirements": {
     "cpus": 4,
     "memory": "16gb",
-    "storage": "64gb"
+    "storage": "32gb"
   },
 
   // No Codespaces o acesso é pela aba PORTS, não por localhost.
