@@ -8,7 +8,7 @@ Este README é o **guia de execução**: siga de cima para baixo e você terá o
 funcionando na sua máquina.
 
 > **Prefere não instalar nada na sua máquina?** Dá para rodar tudo no navegador, pelo
-> GitHub Codespaces: faça o fork (seção 2) e siga a **seção 4** no lugar da 3.
+> GitHub Codespaces: faça o fork (seção 2) e siga a **seção 4** no lugar da 3..
 
 ---
 
